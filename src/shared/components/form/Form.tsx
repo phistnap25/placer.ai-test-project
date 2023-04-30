@@ -21,7 +21,6 @@ export function Form({initialFormValues, formItems, onSubmit, submitButton}: For
 
     const onSubmitForm = (event: React.SyntheticEvent)=>{
         event.preventDefault();
-        console.log('here....');
         setIsSubmitted(true);
         onSubmit && onSubmit(formData);
     }

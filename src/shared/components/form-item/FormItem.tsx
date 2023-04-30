@@ -48,7 +48,6 @@ export function FormItem({
     }
 
     const validateFieldItem = ()=>{
-        console.log(value);
         const updatedValidationErrors = {...validationErrors};
         if(isRequired) {
             if(!value){
