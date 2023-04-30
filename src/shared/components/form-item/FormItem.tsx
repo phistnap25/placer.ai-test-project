@@ -8,46 +8,54 @@ type FormItemProps = {
     onChange: (newValue: any)=>void,
     value: any,
     isSubmitted: boolean,
-    isRequired?: boolean
+    isRequired?: boolean,
+    pattern?: string,
 }
 
 export interface IFormItem {
     controlKey: string,
     control: any,
     label: string,
-    isRequired?: boolean
+    isRequired?: boolean,
+    pattern?: string,
 }
 
 
 
-export function FormItem({control: Control, label, onChange, value, isRequired = false, isSubmitted}: FormItemProps){
+export function FormItem({control: Control, label, onChange, value, isRequired = false, isSubmitted, pattern=''}: FormItemProps){
     const [validationErrors, setValidationErrors] = useState<any>({});
     const [isFieldDirty, setIsFieldDirty] = useState(false);
     const isFieldInvalid = (isSubmitted || isFieldDirty) && Object.keys(validationErrors).length;
 
     useEffect(()=>{
         validateFieldItem();
-    }, [isSubmitted])
+    }, [isSubmitted, value])
 
-    const onUpdateControlValue = (value: any)=>{
+    const onUpdateControlValue = (newValue: any)=>{
         setIsFieldDirty(true);
-        validateFieldItem();
-        onChange(value);
+        onChange(newValue);
     }
 
     const validateFieldItem = ()=>{
+        console.log(value);
+        const updatedValidationErrors = {...validationErrors};
         if(isRequired) {
-            if(value){
-                const updatedValidationErrors = {...validationErrors};
-                delete updatedValidationErrors[VALIDATION_TYPES.IS_REQUIRED];
-                setValidationErrors(updatedValidationErrors);
+            if(!value){
+                updatedValidationErrors[VALIDATION_TYPES.IS_REQUIRED] = true;
             } else {
-                setValidationErrors({
-                    ...validationErrors,
-                    [VALIDATION_TYPES.IS_REQUIRED]: true
-                });
+                delete updatedValidationErrors[VALIDATION_TYPES.IS_REQUIRED];
             }
         }
+        if(value && pattern){
+            if(!value.match(new RegExp(pattern))){
+                updatedValidationErrors[VALIDATION_TYPES.PATTERN] = true;
+            } else {
+                delete updatedValidationErrors[VALIDATION_TYPES.PATTERN];
+            }
+        } else {
+            delete updatedValidationErrors[VALIDATION_TYPES.PATTERN];
+        }
+        setValidationErrors(updatedValidationErrors);
     }
 
     const renderValidationMessage = ()=>{
@@ -58,7 +66,7 @@ export function FormItem({control: Control, label, onChange, value, isRequired =
             {Object.keys(validationErrors).map((errorType)=>{
                 const validationMessageUnFormatted = VALIDATION_MESSAGES[errorType];
                 const validationMessageFormatted = validationMessageUnFormatted.replace('${field}', label);
-                return <div className={'error-message'}>
+                return <div className={'error-message'} key={errorType}>
                     {validationMessageFormatted}
                 </div>
             })}

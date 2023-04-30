@@ -28,6 +28,7 @@ function Signup() {
             control: Input,
             label: 'Email',
             isRequired: true,
+            pattern: '^(([^<>()[\\]\\\\.,;:\\s@"]+(\\.[^<>()[\\]\\\\.,;:\\s@"]+)*)|.(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
         },
         {
             controlKey: 'password',
@@ -47,7 +48,6 @@ function Signup() {
             label: 'Last Name',
             isRequired: true,
         },
-
         {
             controlKey: 'state',
             control: Input,
