@@ -1,24 +1,47 @@
 import React, {useState} from "react";
+import {FormItem, IFormItem} from "../form-item/FormItem";
+import './Form.css';
 
 type FormProps = {
     initialFormValues: any;
+    formItems: Array<IFormItem>;
+    onSubmit?: (formData: any)=>void,
+    submitButton?: any
 }
 
-export function Form({initialFormValues}: FormProps){
+export function Form({initialFormValues, formItems, onSubmit, submitButton}: FormProps){
     const [formData, setFormData] = useState(initialFormValues);
-    const onChangeFormValue = (formDataKey: string) => (event: React.ChangeEvent<HTMLInputElement>)=>{
-        const newValue = event.target.value;
+    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+    const onChangeFormValue = (formDataKey: string) => (newValue: any)=>{
         setFormData({
             ...formData,
             [formDataKey]: newValue
         });
     }
 
-    return <form>
+    const onSubmitForm = (event: React.SyntheticEvent)=>{
+        event.preventDefault();
+        console.log('here....');
+        setIsSubmitted(true);
+        onSubmit && onSubmit(formData);
+    }
+
+    return <form onSubmit={onSubmitForm}>
         <pre>{JSON.stringify(formData, null, 4)}</pre>
-        <div className={'form-item'}>
-            <label>First Name</label>
-            <input value={formData.firstName} onChange={onChangeFormValue('firstName')}/>
-        </div>
+        {formItems.map((record)=>{
+            const {controlKey} = record;
+            return <FormItem
+                {...record}
+                key={controlKey}
+                value={formData[controlKey]}
+                onChange={onChangeFormValue(controlKey)}
+                isSubmitted={isSubmitted}
+            />
+        })}
+        {submitButton ?
+            <div className={'submit-button-container'}>
+                {submitButton}
+            </div>
+             : null }
     </form>
 }

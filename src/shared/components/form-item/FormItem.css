@@ -1,0 +1,30 @@
+.form-item{
+    background: yellow;
+    padding-bottom: 5px;
+}
+
+.form-item label{
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-item .control-container{
+    display: block;
+    width: 100%;
+}
+
+.form-item label .required-star{
+    color: red;
+}
+
+.form-item .has-error{
+    border: 1px solid red;
+}
+
+.form-item .error-messages{
+    padding-top: 2px;
+}
+
+.form-item .error-messages .error-message{
+    color: red;
+}

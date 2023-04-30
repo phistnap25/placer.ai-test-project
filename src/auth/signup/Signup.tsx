@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import { Form } from '@app/components';
+import {Form, IFormItem, Button, Input} from '@app/components';
+import './Signup.css';
 
 type ISignupData = {
     firstName: string;
@@ -21,18 +22,57 @@ const initialSignupData: ISignupData = {
 
 function Signup() {
     const [signupData, setSignupData] = useState<ISignupData>(initialSignupData);
+    const formItems: Array<IFormItem> = [
+        {
+            controlKey: 'email',
+            control: Input,
+            label: 'Email',
+            isRequired: true,
+        },
+        {
+            controlKey: 'password',
+            control: Input,
+            label: 'Password',
+            isRequired: true,
+        },
+        {
+            controlKey: 'firstName',
+            control: Input,
+            label: 'First Name',
+            isRequired: true,
+        },
+        {
+            controlKey: 'lastName',
+            control: Input,
+            label: 'Last Name',
+            isRequired: true,
+        },
+
+        {
+            controlKey: 'state',
+            control: Input,
+            label: 'State',
+            isRequired: true,
+        },
+        {
+            controlKey: 'city',
+            control: Input,
+            label: 'City',
+            isRequired: true,
+        }
+    ];
+
+    const onSubmitForm = (formData: any)=>{
+        console.log('Form submitted with the data', formData);
+    }
 
 
-    return <div>
-        Signup form here...
-        <Form initialFormValues={signupData}/>
-        {/*<form>*/}
-        {/*    <pre>{JSON.stringify(signupData, null, 4)}</pre>*/}
-        {/*   <div className={'form-item'}>*/}
-        {/*       <label>First Name</label>*/}
-        {/*       <input value={signupData.firstName} onChange={onChangeFormValue('firstName')}/>*/}
-        {/*   </div>*/}
-        {/*</form>*/}
+    return <div className={'signup-container'}>
+        <h1>Singup Form</h1>
+        <Form
+            onSubmit={onSubmitForm}
+            initialFormValues={signupData} formItems={formItems}
+            submitButton={<Button>Signup</Button>}/>
     </div>
 }
 export default Signup;
