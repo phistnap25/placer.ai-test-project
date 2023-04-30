@@ -10,6 +10,7 @@ type FormItemProps = {
     isSubmitted: boolean,
     isRequired?: boolean,
     pattern?: string,
+    controlProps?: any
 }
 
 export interface IFormItem {
@@ -18,11 +19,21 @@ export interface IFormItem {
     label: string,
     isRequired?: boolean,
     pattern?: string,
+    controlProps?: any
 }
 
 
 
-export function FormItem({control: Control, label, onChange, value, isRequired = false, isSubmitted, pattern=''}: FormItemProps){
+export function FormItem({
+                             control: Control,
+                             label,
+                             onChange,
+                             value,
+                             isRequired = false,
+                             isSubmitted,
+                             pattern='',
+    controlProps= {}
+}: FormItemProps){
     const [validationErrors, setValidationErrors] = useState<any>({});
     const [isFieldDirty, setIsFieldDirty] = useState(false);
     const isFieldInvalid = (isSubmitted || isFieldDirty) && Object.keys(validationErrors).length;
@@ -79,7 +90,7 @@ export function FormItem({control: Control, label, onChange, value, isRequired =
             {isRequired ? <span className={'required-star'}>*</span>: null}
         </label>
         <div className={'control-container'}>
-            <Control onChange={onUpdateControlValue} value={value}/>
+            <Control onChange={onUpdateControlValue} value={value} controlProps={controlProps}/>
         </div>
         {renderValidationMessage()}
     </div>

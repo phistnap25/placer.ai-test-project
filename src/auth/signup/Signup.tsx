@@ -1,6 +1,7 @@
 import React, {useState} from "react";
-import {Form, IFormItem, Button, Input} from '@app/components';
+import {Form, Button, SelectOption} from '@app/components';
 import './Signup.css';
+import {getSignupFormItems} from "./SignupFormItems";
 
 type ISignupData = {
     firstName: string;
@@ -20,47 +21,20 @@ const initialSignupData: ISignupData = {
     password:''
 }
 
+const mockStateData = [
+    {label: 'state1', value: 'state1'},
+    {label: 'state2', value: 'state2'}
+]
+
+const mockCityData = [
+    {label: 'city1', value: 'city1'},
+    {label: 'city2', value: 'city2'}
+]
+
 function Signup() {
     const [signupData, setSignupData] = useState<ISignupData>(initialSignupData);
-    const formItems: Array<IFormItem> = [
-        {
-            controlKey: 'email',
-            control: Input,
-            label: 'Email',
-            isRequired: true,
-            pattern: '^(([^<>()[\\]\\\\.,;:\\s@"]+(\\.[^<>()[\\]\\\\.,;:\\s@"]+)*)|.(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
-        },
-        {
-            controlKey: 'password',
-            control: Input,
-            label: 'Password',
-            isRequired: true,
-        },
-        {
-            controlKey: 'firstName',
-            control: Input,
-            label: 'First Name',
-            isRequired: true,
-        },
-        {
-            controlKey: 'lastName',
-            control: Input,
-            label: 'Last Name',
-            isRequired: true,
-        },
-        {
-            controlKey: 'state',
-            control: Input,
-            label: 'State',
-            isRequired: true,
-        },
-        {
-            controlKey: 'city',
-            control: Input,
-            label: 'City',
-            isRequired: true,
-        }
-    ];
+    const [stateOptions, setStateOptions] = useState<Array<SelectOption>>(mockStateData);
+    const [cityOptions, setCityOptions] = useState<Array<SelectOption>>(mockCityData);
 
     const onSubmitForm = (formData: any)=>{
         console.log('Form submitted with the data', formData);
@@ -71,7 +45,10 @@ function Signup() {
         <h1>Singup Form</h1>
         <Form
             onSubmit={onSubmitForm}
-            initialFormValues={signupData} formItems={formItems}
+            initialFormValues={signupData}
+            formItems={getSignupFormItems({
+                stateOptions, cityOptions
+            })}
             submitButton={<Button>Signup</Button>}/>
     </div>
 }
