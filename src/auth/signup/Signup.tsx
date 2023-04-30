@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Form, Button, SelectOption} from '@app/components';
 import './Signup.css';
 import {getSignupFormItems} from "./SignupFormItems";
+import {getCityListFromState, getStateList} from "./shared/location-service";
 
 type ISignupData = {
     firstName: string;
@@ -21,31 +22,46 @@ const initialSignupData: ISignupData = {
     password:''
 }
 
-const mockStateData = [
-    {label: 'state1', value: 'state1'},
-    {label: 'state2', value: 'state2'}
-]
-
-const mockCityData = [
-    {label: 'city1', value: 'city1'},
-    {label: 'city2', value: 'city2'}
-]
-
 function Signup() {
     const [signupData, setSignupData] = useState<ISignupData>(initialSignupData);
-    const [stateOptions, setStateOptions] = useState<Array<SelectOption>>(mockStateData);
-    const [cityOptions, setCityOptions] = useState<Array<SelectOption>>(mockCityData);
+    const [stateOptions, setStateOptions] = useState<Array<SelectOption>>([]);
+    const [cityOptions, setCityOptions] = useState<Array<SelectOption>>([]);
+    const userState = signupData.state;
+
+    useEffect(()=>{
+        getStateData();
+    }, []);
+
+    useEffect(()=>{
+        console.log('inside the get city data');
+        getCityData();
+    }, [userState]);
+
+    const getStateData = async ()=>{
+        const stateData = await getStateList();
+        setStateOptions(stateData);
+    }
+
+    const getCityData = async ()=>{
+        setSignupData({...signupData, city: ''});
+        const cityData = await getCityListFromState(signupData.state);
+        setCityOptions(cityData);
+    }
 
     const onSubmitForm = (formData: any)=>{
         console.log('Form submitted with the data', formData);
     }
 
+    const onChangeFormValue = (newFormData: any)=>{
+        setSignupData(newFormData);
+    }
 
     return <div className={'signup-container'}>
         <h1>Singup Form</h1>
         <Form
             onSubmit={onSubmitForm}
-            initialFormValues={signupData}
+            formData={signupData}
+            onUpdate={onChangeFormValue}
             formItems={getSignupFormItems({
                 stateOptions, cityOptions
             })}

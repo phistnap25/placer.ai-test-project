@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 export type SelectOption = {
     value: string,
@@ -15,21 +15,30 @@ type SelectProps = {
 
 
 export function Select({value, onChange, controlProps}: SelectProps){
-    const options = controlProps?.options || [];
+    const controlOptions = controlProps?.options;
+    const [options, setOptions] = useState<Array<SelectOption>>([]);
 
     useEffect(()=>{
-        const hasEmptyOption = options.find(({value})=>value === '');
-        if(!value){
+        setOptions(controlOptions);
+    }, [controlOptions]);
+
+    useEffect(()=>{
+        const hasEmptyOption = options.find(({value}) => value === '');
+        if (!value) {
             //set the empty option
-            if(!hasEmptyOption){
-                options.unshift({label:'', value: ''});
+            if (!hasEmptyOption) {
+                const newOptions = [...options];
+                newOptions.unshift({label: '', value: ''});
+                setOptions(newOptions);
             }
         } else {
-            if(hasEmptyOption){
-                options.shift();
+            if (hasEmptyOption) {
+                const newOptions = [...options];
+                newOptions.shift();
+                setOptions(newOptions);
             }
         }
-    }, [value]);
+    }, [value, options]);
 
     const onChangeSelectValue = (event: React.ChangeEvent<HTMLSelectElement>)=>{
         const newValue = event.target.value;
