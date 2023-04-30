@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 export type SelectOption = {
     value: string,
@@ -15,13 +15,29 @@ type SelectProps = {
 
 
 export function Select({value, onChange, controlProps}: SelectProps){
+    const options = controlProps?.options || [];
+
+    useEffect(()=>{
+        const hasEmptyOption = options.find(({value})=>value === '');
+        if(!value){
+            //set the empty option
+            if(!hasEmptyOption){
+                options.unshift({label:'', value: ''});
+            }
+        } else {
+            if(hasEmptyOption){
+                options.shift();
+            }
+        }
+    }, [value]);
+
     const onChangeSelectValue = (event: React.ChangeEvent<HTMLSelectElement>)=>{
         const newValue = event.target.value;
         onChange(newValue);
     }
 
     return <select value={value} onChange={onChangeSelectValue}>
-        {controlProps.options.map(({label, value})=>{
+        {options.map(({label, value})=>{
             return <option value={value} key={value}>
                 {label}
             </option>
