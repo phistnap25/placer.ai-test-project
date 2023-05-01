@@ -1,4 +1,6 @@
 .signup-container{
+    position: absolute;
+    top: 20rem;
     min-width: 400px;
     border-radius: 4px;
     background: white;

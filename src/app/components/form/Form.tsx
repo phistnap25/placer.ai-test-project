@@ -34,7 +34,6 @@ export function Form({formData, formItems, onSubmit, onUpdate, submitButton}: Fo
     }
 
     return <form onSubmit={onSubmitForm}>
-        <pre>{JSON.stringify(formDataState, null, 4)}</pre>
         {formItems.map((record)=>{
             const {controlKey} = record;
             return <FormItem

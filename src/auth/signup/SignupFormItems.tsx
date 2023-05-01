@@ -1,4 +1,5 @@
 import {Input, Select} from "@app/components";
+import {Password} from "../../app/components/form-controls/password";
 
 export const getSignupFormItems = ({stateOptions, cityOptions}: any)=>{
     return [
@@ -11,7 +12,7 @@ export const getSignupFormItems = ({stateOptions, cityOptions}: any)=>{
         },
         {
             controlKey: 'password',
-            control: Input,
+            control: Password,
             label: 'Password',
             isRequired: true,
         },
