@@ -33,7 +33,6 @@ function Signup() {
     }, []);
 
     useEffect(()=>{
-        console.log('inside the get city data');
         getCityData();
     }, [userState]);
 
@@ -44,6 +43,7 @@ function Signup() {
 
     const getCityData = async ()=>{
         setSignupData({...signupData, city: ''});
+        setCityOptions([]);
         const cityData = await getCityListFromState(signupData.state);
         setCityOptions(cityData);
     }

@@ -1,29 +1,15 @@
-const mockStateData = [
-    {label: 'state1', value: 'state1'},
-    {label: 'state2', value: 'state2'}
-];
-
-const mockCityData = [
-    {label: 'city1', value: 'city1'},
-    {label: 'city2', value: 'city2'}
-];
-
-const sleep = ()=>{
-    return new Promise((resolve)=>{
-        setTimeout(()=>{
-            resolve(null);
-        }, 3000);
-    })
-
-}
+import {api} from "../../../app/utils/api";
 
 export const getStateList = async ()=>{
-    await sleep();
-    return mockStateData;
+    const responseData = await api({url: '/states/United States'});
+    return responseData.map(({state_name}: any)=>{
+        return {value: state_name, label: state_name};
+    });
 }
 
 export const getCityListFromState = async (state: string)=>{
-    console.log(state);
-    await sleep();
-    return mockCityData;
+    const responseData = await api({url: `/cities/${state}`});
+    return responseData.map(({city_name}: any)=>{
+        return {value: city_name, label: city_name};
+    });
 }
