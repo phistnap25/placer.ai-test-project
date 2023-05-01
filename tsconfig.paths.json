@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@app/components": ["./shared/components/index.tsx"]
+      "@app/components": ["./app/components/index.tsx"]
     }
   }
 }
